@@ -1,0 +1,76 @@
+@import url("https://fonts.googleapis.com/css2?family=Creepster&family=Nosifer&family=Rubik+Mono+One&display=swap");
+
+.start-tagline {
+  width: min(70vw, 920px);
+  text-align: center;
+  pointer-events: none;
+}
+
+.start-tagline__title {
+  margin: 0;
+  position: relative;
+  font-family: "Creepster", serif;
+  font-size: clamp(30px, 4.8vw, 70px);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1.05;
+  color: transparent;
+  background: linear-gradient(
+    180deg,
+    #ff5b5b 0%,
+    #e41515 30%,
+    #a80000 65%,
+    #4a0000 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  text-shadow:
+    0 0 6px rgba(238, 18, 18, 0.9),
+    0 0 26px rgba(178, 5, 5, 0.85),
+    0 0 56px rgba(94, 0, 0, 0.8),
+    0 0 110px rgba(68, 0, 0, 0.65);
+  animation: startTaglineFlicker 3.4s ease-in-out infinite;
+}
+
+
+
+.start-tagline__subtitle {
+  margin: 16px 0 0;
+  font-family: "Creepster", serif;
+  font-size: clamp(19px, 2.4vw, 35px);
+  letter-spacing: 0.08em;
+  line-height: 1.2;
+  text-transform: uppercase;
+  color: #ffe7c5;
+  text-shadow:
+    0 0 12px rgba(0, 0, 0, 0.95),
+    0 0 30px rgba(157, 22, 22, 0.65);
+}
+
+@keyframes startTaglineFlicker {
+  0%,
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  8% {
+    opacity: 0.82;
+  }
+  9% {
+    opacity: 1;
+  }
+  36% {
+    opacity: 0.9;
+  }
+  37% {
+    opacity: 1;
+  }
+  70% {
+    opacity: 0.86;
+    transform: translateY(-1px);
+  }
+  71% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

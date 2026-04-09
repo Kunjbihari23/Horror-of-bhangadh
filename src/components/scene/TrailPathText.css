@@ -1,0 +1,427 @@
+@import url("https://fonts.googleapis.com/css2?family=Creepster&family=Teko:wght@400;500;600;700&display=swap");
+
+.trail-station {
+  --card-glow-rgb: 141, 230, 53;
+  position: relative;
+  overflow: hidden;
+  width: min(92vw, 1120px);
+  padding: 28px 28px 30px;
+  opacity: 0;
+  visibility: hidden;
+  will-change: transform, opacity, filter;
+  border-radius: 18px;
+  background:
+    linear-gradient(
+      150deg,
+      rgba(52, 10, 22, 0.52),
+      rgba(18, 10, 28, 0.42) 38%,
+      rgba(9, 11, 22, 0.62) 100%
+    ),
+    radial-gradient(
+      120% 96% at 50% 112%,
+      rgba(148, 0, 0, 0.2) 0%,
+      rgba(2, 2, 2, 0.24) 56%,
+      rgba(0, 0, 0, 0.42) 100%
+    ),
+    rgba(6, 6, 11, 0.36);
+  border: 1px solid rgba(var(--card-glow-rgb), 0.42);
+  box-shadow:
+    0 0 12px rgba(var(--card-glow-rgb), 0.42),
+    0 0 44px rgba(var(--card-glow-rgb), 0.24),
+    0 24px 50px rgba(0, 0, 0, 0.55),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.08),
+    inset 0 0 70px rgba(4, 4, 4, 0.58);
+  backdrop-filter: blur(14px) saturate(125%);
+  -webkit-backdrop-filter: blur(14px) saturate(125%);
+}
+
+.trail-blood {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.trail-station::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      120px 44px at 14% 0%,
+      rgba(168, 12, 12, 0.22),
+      transparent 72%
+    ),
+    radial-gradient(
+      140px 52px at 58% 0%,
+      rgba(172, 12, 12, 0.2),
+      transparent 72%
+    ),
+    radial-gradient(
+      116px 44px at 89% 0%,
+      rgba(150, 9, 9, 0.18),
+      transparent 74%
+    );
+}
+
+.trail-blood::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    rgba(104, 4, 4, 0.32),
+    rgba(186, 10, 10, 0.88),
+    rgba(104, 4, 4, 0.34)
+  );
+  box-shadow: 0 0 14px rgba(146, 0, 0, 0.5);
+}
+
+.trail-blood__drop {
+  --drop-left: 8%;
+  --drop-width: 3px;
+  --drop-base-height: 8px;
+  --drop-max-height: 56px;
+  --drop-duration: 8s;
+  --drop-delay: 0s;
+  --drop-opacity: 0.7;
+  --drop-bead-size: 8px;
+  --drop-travel: 34px;
+  --drop-sway: 0px;
+  --drop-sway-soft: 0px;
+  --drop-sway-mid: 0px;
+  --drop-hue-shift: 0deg;
+  --drop-highlight-opacity: 0.3;
+  position: absolute;
+  top: -2px;
+  left: var(--drop-left);
+  width: var(--drop-width);
+  height: var(--drop-base-height);
+  border-radius: 999px;
+  opacity: var(--drop-opacity);
+  transform-origin: top center;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 88, 88, 0.78) 0%,
+    rgba(196, 20, 20, 0.9) 22%,
+    rgba(114, 0, 0, 0.94) 60%,
+    rgba(54, 0, 0, 0.98) 100%
+  );
+  filter: hue-rotate(var(--drop-hue-shift))
+    drop-shadow(0 0 5px rgba(150, 0, 0, 0.48));
+  animation: trailBloodDropFlow var(--drop-duration)
+    cubic-bezier(0.3, 0.05, 0.24, 1) var(--drop-delay) infinite;
+}
+
+.trail-blood__drop::before {
+  content: "";
+  position: absolute;
+  top: -4px;
+  left: 50%;
+  width: calc(var(--drop-width) + 6px);
+  height: calc(var(--drop-width) + 3px);
+  border-radius: 999px 999px 42% 42%;
+  transform: translateX(-50%);
+  background: radial-gradient(
+    circle at 38% 28%,
+    rgba(255, 110, 110, 0.7) 0%,
+    rgba(143, 6, 6, 0.9) 58%,
+    rgba(69, 0, 0, 0.98) 100%
+  );
+  opacity: calc(var(--drop-opacity) * 0.9);
+}
+
+.trail-blood__drop::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: calc(100% - 2px);
+  width: var(--drop-bead-size);
+  height: var(--drop-bead-size);
+  border-radius: 45% 55% 62% 38% / 54% 41% 59% 46%;
+  transform: translate(-50%, -2px) scale(0.62);
+  background: radial-gradient(
+    circle at 38% 32%,
+    rgba(255, 126, 126, var(--drop-highlight-opacity)) 0%,
+    rgba(204, 24, 24, 0.92) 42%,
+    rgba(90, 0, 0, 1) 100%
+  );
+  opacity: 0;
+  filter: hue-rotate(var(--drop-hue-shift))
+    drop-shadow(0 0 6px rgba(118, 0, 0, 0.64));
+  animation: trailBloodBead var(--drop-duration)
+    cubic-bezier(0.24, 0.02, 0.27, 1) var(--drop-delay) infinite;
+}
+
+@keyframes trailBloodDropFlow {
+  0% {
+    height: var(--drop-base-height);
+    opacity: calc(var(--drop-opacity) * 0.5);
+    transform: translate3d(0, 0, 0) scaleY(0.9);
+  }
+  18% {
+    height: calc(var(--drop-max-height) * 0.38);
+    opacity: calc(var(--drop-opacity) * 0.72);
+    transform: translate3d(var(--drop-sway-soft), 0, 0) scaleY(0.95);
+  }
+  46% {
+    height: var(--drop-max-height);
+    opacity: var(--drop-opacity);
+    transform: translate3d(var(--drop-sway), 0, 0) scaleY(1);
+  }
+  74% {
+    height: calc(var(--drop-max-height) * 0.84);
+    opacity: calc(var(--drop-opacity) * 0.9);
+    transform: translate3d(var(--drop-sway-mid), 0, 0) scaleY(0.96);
+  }
+  100% {
+    height: var(--drop-base-height);
+    opacity: calc(var(--drop-opacity) * 0.56);
+    transform: translate3d(0, 0, 0) scaleY(0.92);
+  }
+}
+
+@keyframes trailBloodBead {
+  0%,
+  24% {
+    opacity: 0;
+    transform: translate(-50%, -2px) scale(0.62);
+  }
+  34% {
+    opacity: calc(var(--drop-opacity) * 0.84);
+    transform: translate(-50%, 2px) scale(0.9, 1.04);
+  }
+  62% {
+    opacity: calc(var(--drop-opacity) * 0.98);
+    transform: translate(calc(-50% + var(--drop-sway-mid)), var(--drop-travel))
+      scale(1.06, 0.9);
+  }
+  84% {
+    opacity: calc(var(--drop-opacity) * 0.3);
+    transform: translate(
+        calc(-50% + var(--drop-sway-mid)),
+        calc(var(--drop-travel) + 8px)
+      )
+      scale(0.84);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -2px) scale(0.62);
+  }
+}
+
+.trail-station--trailer {
+  --card-glow-rgb: 71, 228, 242;
+}
+
+.trail-station--about {
+  --card-glow-rgb: 248, 76, 128;
+}
+
+.trail-station--features {
+  --card-glow-rgb: 132, 235, 66;
+}
+
+.trail-station__heading {
+  margin: 0 0 18px;
+  text-align: center;
+  font-family: "Creepster", serif;
+  font-size: clamp(34px, 3.3vw, 66px);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #8de635;
+  text-shadow:
+    0 0 8px rgba(141, 230, 53, 0.85),
+    0 0 26px rgba(63, 130, 0, 0.75),
+    0 0 50px rgba(0, 0, 0, 0.92);
+}
+
+.trail-trailer {
+  display: grid;
+  grid-template-columns: 1fr 1.15fr;
+  gap: 26px;
+  align-items: center;
+}
+
+.trail-trailer__copy p {
+  margin: 0 0 14px;
+  font-family: "Teko", sans-serif;
+  font-size: clamp(24px, 1.8vw, 34px);
+  letter-spacing: 0.02em;
+  line-height: 1.15;
+  color: #f1f1e6;
+  text-shadow: 0 0 14px rgba(0, 0, 0, 0.82);
+}
+
+.trail-cta {
+  display: inline-block;
+  margin-top: 4px;
+  padding: 10px 24px;
+  border-radius: 999px;
+  border: 1px solid rgba(218, 115, 17, 0.75);
+  background: linear-gradient(180deg, #ff9a2f 0%, #f07f12 100%);
+  color: #140a00;
+  font-family: "Teko", sans-serif;
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.trail-cta:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0 22px rgba(236, 132, 29, 0.54);
+}
+
+.trail-trailer__media {
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(139, 0, 0, 0.52);
+  background: #050505;
+  box-shadow: 0 0 28px rgba(109, 0, 0, 0.42);
+}
+
+.trail-trailer__media iframe {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: 0;
+}
+
+.trail-trailer__fallback {
+  padding: 10px;
+}
+
+.trail-trailer__fallback img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.trail-trailer__fallback span {
+  display: block;
+  margin-top: 10px;
+  text-align: center;
+  font-family: "Teko", sans-serif;
+  font-size: clamp(20px, 1.4vw, 26px);
+  letter-spacing: 0.02em;
+  color: #ffcf9e;
+}
+
+.trail-about p {
+  margin: 0 0 12px;
+  font-family: "Teko", sans-serif;
+  font-size: clamp(24px, 1.7vw, 32px);
+  letter-spacing: 0.015em;
+  line-height: 1.2;
+  color: #f6f4ec;
+  text-shadow: 0 0 12px rgba(0, 0, 0, 0.84);
+}
+
+.trail-about__final {
+  margin-top: 14px;
+  color: #ffbaba;
+  text-shadow:
+    0 0 10px rgba(138, 0, 0, 0.8),
+    0 0 25px rgba(100, 0, 0, 0.62);
+}
+
+.trail-features {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.trail-features__item {
+  border: 1px solid rgba(139, 169, 27, 0.42);
+  border-radius: 10px;
+  padding: 12px 18px;
+  font-family: "Teko", sans-serif;
+  font-size: clamp(26px, 1.9vw, 34px);
+  letter-spacing: 0.03em;
+  color: #fcf8ee;
+  background: rgba(3, 8, 6, 0.6);
+  box-shadow: inset 0 0 14px rgba(0, 0, 0, 0.5);
+}
+
+
+.trail-actions__text {
+  margin: 0 auto 16px;
+  max-width: 760px;
+  text-align: center;
+  font-family: "Teko", sans-serif;
+  font-size: clamp(24px, 1.8vw, 34px);
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+  color: #f9f0e5;
+  text-shadow:
+    0 0 10px rgba(0, 0, 0, 0.9),
+    0 0 24px rgba(120, 0, 0, 0.5);
+}
+
+.trail-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.trail-actions__cta {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 76px;
+  border-radius: 14px;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  font-family: "Creepster", serif;
+  font-size: clamp(24px, 2.3vw, 42px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.trail-actions__cta:hover {
+  transform: translateY(-2px);
+}
+
+.trail-actions__cta--download {
+  color: #210500;
+  background: linear-gradient(180deg, #ffb02e 0%, #ff7108 100%);
+  box-shadow:
+    0 0 18px rgba(255, 131, 38, 0.6),
+    inset 0 0 8px rgba(255, 255, 255, 0.35);
+}
+
+.trail-actions__cta--contact {
+  color: #ffe8e8;
+  background: linear-gradient(180deg, #820c0c 0%, #3a0404 100%);
+  box-shadow:
+    0 0 20px rgba(224, 25, 25, 0.62),
+    inset 0 0 10px rgba(255, 183, 183, 0.24);
+}
+
+@media (max-width: 960px) {
+  .trail-station {
+    width: min(95vw, 720px);
+    padding: 22px 18px 24px;
+  }
+
+  .trail-trailer {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .trail-features {
+    grid-template-columns: 1fr;
+  }
+}

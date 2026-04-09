@@ -1,0 +1,384 @@
+/* ─── Horror Loader ─── */
+@import url('https://fonts.googleapis.com/css2?family=Creepster&family=Nosifer&display=swap');
+
+.horror-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition: opacity 1.2s ease, visibility 1.2s ease;
+}
+
+.horror-loader.fade-out {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* ─── Full-screen WebGL Canvas ─── */
+.horror-loader__canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+/* ─── Overlay fog layers ─── */
+.horror-loader__fog {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.horror-loader__fog::before,
+.horror-loader__fog::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+
+.horror-loader__fog::before {
+  background: radial-gradient(
+    ellipse at 50% 120%,
+    rgba(80, 0, 0, 0.25) 0%,
+    transparent 60%
+  );
+  animation: fogPulse 4s ease-in-out infinite;
+}
+
+.horror-loader__fog::after {
+  background: radial-gradient(
+    ellipse at 50% -20%,
+    rgba(0, 0, 0, 0.9) 0%,
+    transparent 70%
+  );
+}
+
+@keyframes fogPulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+/* ─── Vignette ─── */
+.horror-loader__vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  box-shadow: inset 0 0 200px 60px rgba(0, 0, 0, 0.95);
+}
+
+/* ─── Content Layer ─── */
+.horror-loader__content {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 36px;
+}
+
+/* ─── Title ─── */
+.horror-loader__title {
+  font-family: 'Nosifer', cursive;
+  font-size: clamp(1.4rem, 4vw, 2.8rem);
+  color: #8b0000;
+  text-shadow:
+    0 0 10px #8b0000,
+    0 0 30px #5c0000,
+    0 0 60px rgba(139, 0, 0, 0.4),
+    0 0 100px rgba(80, 0, 0, 0.2);
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  animation: titleFlicker 3s ease-in-out infinite;
+  user-select: none;
+  text-align: center;
+}
+
+@keyframes titleFlicker {
+  0%, 100% { opacity: 1; }
+  4% { opacity: 0.3; }
+  6% { opacity: 0.9; }
+  8% { opacity: 0.4; }
+  10% { opacity: 1; }
+  50% { opacity: 0.95; }
+  52% { opacity: 0.6; }
+  54% { opacity: 1; }
+}
+
+/* ─── Subtitle (horror quote) ─── */
+.horror-loader__subtitle {
+  font-family: 'Creepster', cursive;
+  font-size: clamp(0.8rem, 2vw, 1.15rem);
+  color: rgba(180, 60, 60, 0.7);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  animation: subtitleGlitch 5s ease-in-out infinite;
+  text-align: center;
+}
+
+@keyframes subtitleGlitch {
+  0%, 100% { 
+    opacity: 0.7; 
+    transform: translateX(0);
+  }
+  20% { 
+    opacity: 0.5;
+    transform: translateX(-2px);
+  }
+  21% { 
+    opacity: 0.8;
+    transform: translateX(2px);
+  }
+  22% { 
+    opacity: 0.7;
+    transform: translateX(0);
+  }
+  60% {
+    opacity: 0.6;
+    transform: translateX(1px);
+  }
+  61% {
+    opacity: 0.3;
+    transform: translateX(-3px);
+  }
+  62% {
+    opacity: 0.7;
+    transform: translateX(0);
+  }
+}
+
+/* ─── Progress Container ─── */
+.horror-loader__progress-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  width: clamp(260px, 50vw, 420px);
+}
+
+/* ─── Progress Bar ─── */
+.horror-loader__bar-outer {
+  width: 100%;
+  height: 3px;
+  background: rgba(60, 0, 0, 0.4);
+  border-radius: 2px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 0 15px rgba(139, 0, 0, 0.15);
+}
+
+.horror-loader__bar-inner {
+  height: 100%;
+  background: linear-gradient(90deg, #5c0000, #8b0000, #b22222, #8b0000);
+  background-size: 300% 100%;
+  border-radius: 2px;
+  transition: width 0.4s ease-out;
+  position: relative;
+  animation: bloodFlow 2s linear infinite;
+}
+
+.horror-loader__bar-inner::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: -4px;
+  width: 12px;
+  height: 12px;
+  background: radial-gradient(circle, #ff2020, #8b0000 60%, transparent 70%);
+  border-radius: 50%;
+  filter: blur(2px);
+  animation: barGlow 1.5s ease-in-out infinite;
+}
+
+@keyframes bloodFlow {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 300% 50%; }
+}
+
+@keyframes barGlow {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.5); }
+}
+
+/* ─── Drip effects under the bar ─── */
+.horror-loader__drips {
+  position: absolute;
+  bottom: -20px;
+  left: 0;
+  width: 100%;
+  height: 20px;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.horror-loader__drip {
+  position: absolute;
+  width: 2px;
+  background: linear-gradient(to bottom, #8b0000, transparent);
+  border-radius: 0 0 2px 2px;
+  animation: dripFall var(--drip-duration) ease-in var(--drip-delay) infinite;
+  opacity: 0;
+  top: 0;
+}
+
+@keyframes dripFall {
+  0% { height: 0; opacity: 0.8; }
+  40% { height: var(--drip-height); opacity: 0.6; }
+  100% { height: var(--drip-height); opacity: 0; }
+}
+
+/* ─── Percentage Text ─── */
+.horror-loader__percent {
+  font-family: 'Creepster', cursive;
+  font-size: clamp(1.2rem, 3vw, 1.8rem);
+  color: #8b0000;
+  text-shadow:
+    0 0 8px rgba(139, 0, 0, 0.6),
+    0 0 20px rgba(139, 0, 0, 0.3);
+  letter-spacing: 4px;
+  animation: percentPulse 2s ease-in-out infinite;
+}
+
+@keyframes percentPulse {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; }
+}
+
+/* ─── Warning Text ─── */
+.horror-loader__warning {
+  font-family: 'Creepster', cursive;
+  font-size: clamp(0.65rem, 1.2vw, 0.85rem);
+  color: rgba(139, 0, 0, 0.35);
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  animation: warningFade 3s ease-in-out infinite;
+  margin-top: 8px;
+}
+
+@keyframes warningFade {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 0.15; }
+}
+
+/* ─── Floating Particles (dust / ember) ─── */
+.horror-loader__particles {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.horror-loader__particle {
+  position: absolute;
+  width: var(--p-size, 2px);
+  height: var(--p-size, 2px);
+  background: radial-gradient(circle, rgba(139, 0, 0, 0.6), transparent);
+  border-radius: 50%;
+  animation: particleFloat var(--p-duration) linear var(--p-delay) infinite;
+  opacity: 0;
+}
+
+@keyframes particleFloat {
+  0% {
+    transform: translateY(100vh) translateX(0) scale(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: var(--p-opacity, 0.5);
+    transform: translateY(80vh) translateX(10px) scale(1);
+  }
+  90% {
+    opacity: var(--p-opacity, 0.3);
+  }
+  100% {
+    transform: translateY(-10vh) translateX(calc(var(--p-drift, 30px) * -1)) scale(0.3);
+    opacity: 0;
+  }
+}
+
+/* ─── Scan Lines ─── */
+.horror-loader__scanlines {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.08) 2px,
+    rgba(0, 0, 0, 0.08) 4px
+  );
+  animation: scanlineScroll 8s linear infinite;
+}
+
+@keyframes scanlineScroll {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(4px); }
+}
+
+/* ─── Lightning Flash ─── */
+.horror-loader__flash {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  background: rgba(200, 200, 255, 0);
+  animation: lightningFlash 8s ease-in-out infinite;
+}
+
+@keyframes lightningFlash {
+  0%, 100% { background: rgba(200, 200, 255, 0); }
+  45% { background: rgba(200, 200, 255, 0); }
+  46% { background: rgba(200, 200, 255, 0.08); }
+  47% { background: rgba(200, 200, 255, 0); }
+  48% { background: rgba(200, 200, 255, 0.12); }
+  49% { background: rgba(200, 200, 255, 0); }
+}
+
+/* ─── Enter Button ─── */
+.horror-loader__enter {
+  font-family: 'Nosifer', cursive;
+  font-size: clamp(0.8rem, 1.8vw, 1.1rem);
+  color: #8b0000;
+  background: transparent;
+  border: 1px solid rgba(139, 0, 0, 0.4);
+  padding: 12px 40px;
+  cursor: pointer;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+  text-shadow: 0 0 10px rgba(139, 0, 0, 0.5);
+  animation: enterPulse 2s ease-in-out infinite;
+  margin-top: 8px;
+}
+
+.horror-loader__enter:hover {
+  border-color: #8b0000;
+  background: rgba(139, 0, 0, 0.1);
+  box-shadow:
+    0 0 20px rgba(139, 0, 0, 0.3),
+    inset 0 0 20px rgba(139, 0, 0, 0.1);
+  text-shadow: 0 0 20px rgba(139, 0, 0, 0.8);
+  transform: scale(1.04);
+}
+
+@keyframes enterPulse {
+  0%, 100% { 
+    border-color: rgba(139, 0, 0, 0.3);
+    box-shadow: 0 0 10px rgba(139, 0, 0, 0.1);
+  }
+  50% { 
+    border-color: rgba(139, 0, 0, 0.6);
+    box-shadow: 0 0 20px rgba(139, 0, 0, 0.2);
+  }
+}
