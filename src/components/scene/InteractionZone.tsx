@@ -96,7 +96,7 @@ export default function InteractionZone({
         }`,
       transparent: true,
       depthWrite: false,
-
+      
       side: THREE.DoubleSide,
       blending: THREE.AdditiveBlending,
     });
@@ -179,7 +179,7 @@ export default function InteractionZone({
         }`,
       transparent: true,
       depthWrite: false,
-      depthTest: false,
+       depthTest: false,
       side: THREE.DoubleSide,
       blending: THREE.AdditiveBlending,
     });

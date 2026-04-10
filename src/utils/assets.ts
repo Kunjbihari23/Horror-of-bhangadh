@@ -1,4 +1,4 @@
-export const BaseUrl = "/horror-of-bhangadh/";
+export const BaseUrl = "/";
 export const DownloadNowUrl =
   "https://play.google.com/store/apps/details?id=com.devstree.HorrorOfBhangarhFort";
 export const CompanyEmail = "info@q99studio.com";

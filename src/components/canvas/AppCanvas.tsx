@@ -9,6 +9,7 @@ import Lenis from "lenis";
 import { ASSETS } from "../../utils/assets";
 import { InteractionProvider } from "../../context/InteractionProvider";
 import InteractionHUD from "../scene/InteractionHUD";
+import ControlsOverlay from "../controls/ControlsOverlay";
 
 /**
  * This invisible component sits inside <Canvas> and forwards
@@ -165,6 +166,7 @@ function AppCanvas() {
             height: "100vh",
           }}
         >
+          <ControlsOverlay canMove={canMove} />
           <Canvas
             shadows
             dpr={[1, 2]}

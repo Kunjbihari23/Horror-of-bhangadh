@@ -45,4 +45,3 @@ next-env.d.ts
 
 pnpm-lock.yaml
 package-lock.json
-.env*.local
