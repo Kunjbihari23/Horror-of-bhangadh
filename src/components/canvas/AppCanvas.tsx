@@ -7,16 +7,14 @@ import { Suspense, useEffect, useState, useCallback, useRef } from "react";
 import HorrorLoader from "../loader/HorrorLoader";
 import Lenis from "lenis";
 import { ASSETS } from "../../utils/assets";
+import { InteractionProvider } from "../../context/InteractionProvider";
+import InteractionHUD from "../scene/InteractionHUD";
 
 /**
  * This invisible component sits inside <Canvas> and forwards
  * drei's loading progress to the parent via a callback ref.
  */
-function ProgressReporter({
-  onProgress,
-}: {
-  onProgress: (p: number) => void;
-}) {
+function ProgressReporter({ onProgress }: { onProgress: (p: number) => void }) {
   const { progress } = useProgress();
 
   useEffect(() => {
@@ -124,7 +122,7 @@ function AppCanvas() {
     if (!ambient) {
       ambient = new Audio(ASSETS.sounds.ambient);
       ambient.loop = true;
-      ambient.volume =  1;
+      ambient.volume = 1;
       ambient.preload = "auto";
       ambientAudioRef.current = ambient;
     }
@@ -148,65 +146,77 @@ function AppCanvas() {
   }, [startAmbientAudio]);
 
   return (
-    <div style={{ position: "relative", width: "100vw" }}>
-      {/* Loader overlay — pure DOM, sits above the canvas */}
-      {!entered && (
-        <HorrorLoader
-          progress={progress}
-          onStartAmbient={startAmbientAudio}
-          onEnter={() => setEntered(true)}
-        />
-      )}
+    <InteractionProvider>
+      <div style={{ position: "relative", width: "100vw" }}>
+        {/* Loader overlay — pure DOM, sits above the canvas */}
+        {!entered && (
+          <HorrorLoader
+            progress={progress}
+            onStartAmbient={startAmbientAudio}
+            onEnter={() => setEntered(true)}
+          />
+        )}
 
-      <div style={{ position: "fixed", inset: 0, width: "100vw", height: "100vh" }}>
-        <Canvas
-          shadows
-          dpr={[1, 2]}
-          gl={{
-            toneMapping: THREE.ACESFilmicToneMapping,
-            toneMappingExposure: 1.4,
-          }}
-          camera={{ position: [0, 2.8, 20], fov: 70 }}
-        >
-          <ProgressReporter onProgress={handleProgress} />
-
-          <Suspense fallback={null}>
-            <CorridorScene
-              scrollProgress={scrollProgress}
-              canMove={canMove}
-              onMoveStart={handleMoveStart}
-              entered={entered}
-            />
-          </Suspense>
-          <Preload all />
-        </Canvas>
-      </div>
-
-      {showMoveHint && (
         <div
           style={{
             position: "fixed",
-            left: "50%",
-            bottom: "6vh",
-            transform: "translateX(-50%)",
-            padding: "12px 20px",
-            background: "rgba(12, 16, 24, 0.72)",
-            border: "1px solid rgba(150, 170, 210, 0.35)",
-            borderRadius: 999,
-            color: "#e7f0ff",
-            fontSize: 14,
-            letterSpacing: "0.12em",
-            textTransform: "uppercase",
-            zIndex: 10,
+            inset: 0,
+            width: "100vw",
+            height: "100vh",
           }}
         >
-          Now you can move
-        </div>
-      )}
+          <Canvas
+            shadows
+            dpr={[1, 2]}
+            gl={{
+              toneMapping: THREE.ACESFilmicToneMapping,
+              toneMappingExposure: 1.4,
+            }}
+            camera={{ position: [0, 2.8, 20], fov: 70 }}
+          >
+            <ProgressReporter onProgress={handleProgress} />
 
-      {/* Scroll space to drive Lenis progress while canvas stays fixed */}
-      <div style={{ height: `${scrollHeightVh}vh` }} aria-hidden />
-    </div>
+            <Suspense fallback={null}>
+              <CorridorScene
+                scrollProgress={scrollProgress}
+                canMove={canMove}
+                onMoveStart={handleMoveStart}
+                entered={entered}
+              />
+            </Suspense>
+            <Preload all />
+          </Canvas>
+        </div>
+
+        {/* Interaction HUD - renders outside Canvas */}
+        <InteractionHUD />
+
+        {showMoveHint && (
+          <div
+            style={{
+              position: "fixed",
+              left: "50%",
+              bottom: "6vh",
+              transform: "translateX(-50%)",
+              padding: "12px 20px",
+              background: "rgba(12, 16, 24, 0.72)",
+              border: "1px solid rgba(150, 170, 210, 0.35)",
+              borderRadius: 999,
+              color: "#e7f0ff",
+              fontSize: 14,
+              letterSpacing: "0.12em",
+              textTransform: "uppercase",
+              zIndex: 10,
+            }}
+          >
+            Now you can move
+          </div>
+        )}
+
+        {/* Scroll space to drive Lenis progress while canvas stays fixed */}
+        <div style={{ height: `${scrollHeightVh}vh` }} aria-hidden />
+      </div>
+    </InteractionProvider>
   );
 }
 

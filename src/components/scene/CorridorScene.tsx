@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useGLTF } from "@react-three/drei";
 import { useMemo } from "react";
 import * as THREE from "three";
@@ -7,6 +6,7 @@ import Clouds from "./Clouds";
 import Fireflies from "./Fireflies";
 import Floor from "./Floor";
 import FortScene from "./Fort";
+import InteractionZoneManager from "./InteractionZoneManager";
 import Lights from "./Lights";
 import Path from "./Path";
 import PlayerControls from "./PlayerControls";
@@ -28,7 +28,7 @@ function CorridorScene({
   scrollProgress,
   canMove,
   onMoveStart,
-  entered
+  entered,
 }: CorridorSceneProps) {
   const { scene } = useGLTF(ASSETS.Wall);
 
@@ -59,7 +59,7 @@ function CorridorScene({
     () => ({
       minX: -corridorHalfWidth * 0.9,
       maxX: corridorHalfWidth * 0.9,
-      minZ: fortPosition[2] - 90,
+      minZ: fortPosition[2] + 25,
       maxZ: 0,
     }),
     [corridorHalfWidth, fortPosition],
@@ -86,11 +86,13 @@ function CorridorScene({
         size={[pathWidth / 1.2, totalPathLength]}
       />
       <TrailPathText enabled={entered} />
-     
+
+      {/* Interaction zones (Contact Us, Download Now) */}
+      {canMove && <InteractionZoneManager />}
 
       {/* fort scene */}
       <FortScene position={fortPosition} />
-     
+
       <Fireflies />
 
       {Array.from({ length: COUNT }).map((_, i) => (

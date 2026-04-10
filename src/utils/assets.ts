@@ -1,4 +1,8 @@
 export const BaseUrl = "/horror-of-bhangadh/";
+export const DownloadNowUrl =
+  "https://play.google.com/store/apps/details?id=com.devstree.HorrorOfBhangarhFort";
+export const CompanyEmail = "info@q99studio.com";
+export const ContactUsUrl = "https://www.q99studio.com/contact";
 export const ASSETS = {
   Wall: `${BaseUrl}Bhangath_Wall_M1.glb`,
   mohini: `${BaseUrl}mohini.glb`,

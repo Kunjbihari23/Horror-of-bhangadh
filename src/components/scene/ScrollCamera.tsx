@@ -17,7 +17,7 @@ function ScrollCamera({
   start = [0, 2.8, 20],
   end = [0, 3.4, -500],
   lookAtStart = [0, 2.6, -180],
-  lookAtEnd = [0, 3.2, -560],
+  lookAtEnd = [0, 3.2, -500],
 }: ScrollCameraProps) {
   const { camera } = useThree();
 
