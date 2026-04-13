@@ -12,5 +12,5 @@ export default defineConfig({
     babel({ presets: [reactCompilerPreset()] }),
     glsl(),
   ],
-  base: "/horror-of-bhangadh/",
+  base: "/",
 });
