@@ -1,4 +1,4 @@
-export const BaseUrl = "/";
+export const BaseUrl = "/horror-of-bhangadh/";
 export const DownloadNowUrl =
   "https://play.google.com/store/apps/details?id=com.devstree.HorrorOfBhangarhFort";
 export const CompanyEmail = "info@q99studio.com";
@@ -6,8 +6,7 @@ export const ContactUsUrl = "https://www.q99studio.com/contact";
 export const ASSETS = {
   Wall: `${BaseUrl}Bhangath_Wall_M1.glb`,
   mohini: `${BaseUrl}mohini.glb`,
-  mohini3: `${BaseUrl}mohini-3.glb`,
-  mohiniWalking: `${BaseUrl}Walking-mohini.fbx`,
+  mohiniComplete: `${BaseUrl}mohini-walk.fbx`,
   floor: {
     alpha: `${BaseUrl}coast_sand_rocks_02_1k/alpha.webp`,
     diff: `${BaseUrl}coast_sand_rocks_02_1k/coast_sand_rocks_02_diff_1k.webp`,
@@ -25,8 +24,7 @@ export const ASSETS = {
   fortBoard: `${BaseUrl}Bhangarh_board.glb`,
   sounds: {
     ambient: `${BaseUrl}sounds/horror2.mp3`,
-    pulse: `${BaseUrl}sounds/horror1.mp3`,
-    sting: `${BaseUrl}sounds/horror-cat.mp3`,
+    mohini: `${BaseUrl}sounds/horror1.mp3`,
   },
   posters: {
     poster1: `${BaseUrl}poster/poster1.jpg`,
