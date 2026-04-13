@@ -1,8 +1,4 @@
-import {
-  useAnimations,
-  useEnvironment,
-  useFBX
-} from "@react-three/drei";
+import { useAnimations, useEnvironment, useFBX } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
@@ -12,14 +8,14 @@ import { FORT_WINDOW_SPIRIT_MOHINI } from "./fortLayout";
 function FortWindowSpiritsMohini() {
   // 1. Log immediately to track loading state
 
-  const soundRef = useRef<THREE.Audio | null>(null);
-const listenerRef = useRef<THREE.AudioListener | null>(null);
+  const soundRef = useRef<THREE.PositionalAudio | null>(null);
+  const listenerRef = useRef<THREE.AudioListener | null>(null);
 
   const fbx = useFBX(ASSETS.mohiniComplete);
   // 'city' provides neutral, crisp lighting suitable for a horror night scene
   const reflectionTexture = useEnvironment({ preset: "city" });
 
-  const group = useRef<THREE.Group>(null);
+  const group = useRef<THREE.Group | null>(null);
 
   const [isVisible, setIsVisible] = useState(false);
   const [hasTriggered, setHasTriggered] = useState(false);
@@ -33,7 +29,7 @@ const listenerRef = useRef<THREE.AudioListener | null>(null);
 
     const ghostWorldPos = new THREE.Vector3();
     group.current.getWorldPosition(ghostWorldPos);
-    
+
     const distanceToPlayer = state.camera.position.distanceTo(ghostWorldPos);
 
     // Trigger proximity
@@ -63,8 +59,6 @@ const listenerRef = useRef<THREE.AudioListener | null>(null);
   // ... (Lines 62-113 remain unchanged)
   useEffect(() => {
     if (!fbx || !reflectionTexture) return;
-
-   
 
     fbx.traverse((child) => {
       if (child instanceof THREE.Mesh) {
@@ -107,68 +101,68 @@ const listenerRef = useRef<THREE.AudioListener | null>(null);
   }, [actions, fbx, reflectionTexture]);
 
   // 4. Play animation ONLY when she becomes visible
-useEffect(() => {
-  if (isVisible && !isGone) {
-    const walkAction = Object.values(actions)[0];
+  useEffect(() => {
+    if (isVisible && !isGone) {
+      const walkAction = Object.values(actions)[0];
 
-    // 🎵 PLAY SOUND
-    // 🎵 PLAY SOUND (safe)
-if (
-  soundRef.current &&
-  soundRef.current.buffer &&
-  !soundRef.current.isPlaying
-) {
-  soundRef.current.play();
-}
+      // 🎵 PLAY SOUND
+      // 🎵 PLAY SOUND (safe)
+      if (
+        soundRef.current &&
+        soundRef.current.buffer &&
+        !soundRef.current.isPlaying
+      ) {
+        soundRef.current.play();
+      }
 
-    if (walkAction) {
-      walkAction.setLoop(THREE.LoopOnce, 1);
-      walkAction.clampWhenFinished = true;
-      walkAction.fadeIn(0.2).play();
+      if (walkAction) {
+        walkAction.setLoop(THREE.LoopOnce, 1);
+        walkAction.clampWhenFinished = true;
+        walkAction.fadeIn(0.2).play();
 
-      const onFinished = () => {
-        console.log("💨 Mohini vanished!");
+        const onFinished = () => {
+          console.log("💨 Mohini vanished!");
 
-        // 🔇 STOP SOUND
-        if (soundRef.current?.isPlaying) {
-          soundRef.current.stop();
-        }
+          // 🔇 STOP SOUND
+          if (soundRef.current?.isPlaying) {
+            soundRef.current.stop();
+          }
 
-        setIsGone(true);
-      };
+          setIsGone(true);
+        };
 
-      mixer.addEventListener("finished", onFinished);
-      return () => mixer.removeEventListener("finished", onFinished);
+        mixer.addEventListener("finished", onFinished);
+        return () => mixer.removeEventListener("finished", onFinished);
+      }
     }
-  }
-}, [isVisible, actions, mixer, isGone]);
+  }, [isVisible, actions, mixer, isGone]);
 
   useEffect(() => {
-  const listener = new THREE.AudioListener();
-  listenerRef.current = listener;
+    const listener = new THREE.AudioListener();
+    listenerRef.current = listener;
 
-  // attach listener to camera
-  const camera = group.current?.parent as THREE.Object3D;
-  if (camera) {
-    camera.add(listener);
-  }
+    // attach listener to camera
+    const camera = group.current?.parent as THREE.Object3D;
+    if (camera) {
+      camera.add(listener);
+    }
 
-  const sound = new THREE.PositionalAudio(listener);
-  const audioLoader = new THREE.AudioLoader();
+    const sound = new THREE.PositionalAudio(listener);
+    const audioLoader = new THREE.AudioLoader();
 
-  audioLoader.load(ASSETS.sounds.mohini, (buffer) => {
-    sound.setBuffer(buffer);
-    sound.setLoop(true); // loop while visible
-    sound.setVolume(10);
-    sound.setRefDistance(10);
-  });
- group.current.add(sound);
-  soundRef.current = sound;
+    audioLoader.load(ASSETS.sounds.mohini, (buffer) => {
+      sound.setBuffer(buffer);
+      sound.setLoop(true); // loop while visible
+      sound.setVolume(10);
+      sound.setRefDistance(10);
+    });
+    if (group.current) group.current?.add(sound);
+    if (soundRef.current) soundRef.current = sound;
 
-  return () => {
-    sound.stop();
-  };
-}, []);
+    return () => {
+      sound.stop();
+    };
+  }, []);
 
   return (
     <group
