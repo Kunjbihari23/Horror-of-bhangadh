@@ -156,8 +156,8 @@ function FortWindowSpiritsMohini() {
       sound.setVolume(10);
       sound.setRefDistance(10);
     });
-    if (group.current) group.current?.add(sound);
-    if (soundRef.current) soundRef.current = sound;
+    group.current?.add(sound);
+    soundRef.current = sound;
 
     return () => {
       sound.stop();
