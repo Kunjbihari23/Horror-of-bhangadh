@@ -10,6 +10,7 @@ import { ASSETS } from "../../utils/assets";
 import { InteractionProvider } from "../../context/InteractionProvider";
 import InteractionHUD from "../scene/InteractionHUD";
 import ControlsOverlay from "../controls/ControlsOverlay";
+import MobileJoystick from "../controls/MobileJoystick";
 
 /**
  * This invisible component sits inside <Canvas> and forwards
@@ -30,11 +31,13 @@ function AppCanvas() {
   const [progress, setProgress] = useState(0);
   const [canMove, setCanMove] = useState(false);
   const [showMoveHint, setShowMoveHint] = useState(false);
+  const [useJoystick, setUseJoystick] = useState(false);
   const scrollProgress = useRef(0);
   const hasReachedEnd = useRef(false);
   const hintTimeout = useRef<number | null>(null);
   const scrollHeightVh = 300;
   const ambientAudioRef = useRef<HTMLAudioElement | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
 
   const handleProgress = useCallback((p: number) => {
     setProgress(p);
@@ -67,7 +70,8 @@ function AppCanvas() {
       duration: 1.1,
       lerp: 0.08,
       smoothWheel: true,
-      // smoothTouch: true,
+      smoothTouch: true,
+      touchMultiplier: 1.5,
       wheelMultiplier: 0.9,
     });
 
@@ -110,10 +114,19 @@ function AppCanvas() {
   }, [entered, triggerMoveHint]);
 
   useEffect(() => {
+    const checkMobile = () => {
+      const mobile = window.innerWidth <= 768;
+      setIsMobile(mobile);
+      // default to joystick on mobile
+      setUseJoystick((prev) => (mobile ? true : prev));
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
     return () => {
       if (hintTimeout.current !== null) {
         window.clearTimeout(hintTimeout.current);
       }
+      window.removeEventListener("resize", checkMobile);
     };
   }, []);
 
@@ -163,10 +176,19 @@ function AppCanvas() {
             position: "fixed",
             inset: 0,
             width: "100vw",
+            /* iOS Safari: fill available height excluding browser chrome */
             height: "100vh",
+            // @ts-expect-error webkit vendor prefix
+            WebkitHeight: "-webkit-fill-available",
+            touchAction: "none",
           }}
         >
-          <ControlsOverlay canMove={canMove} />
+          <ControlsOverlay
+            canMove={canMove}
+            isMobile={isMobile}
+            useJoystick={useJoystick}
+            onToggleMode={() => setUseJoystick((v) => !v)}
+          />
           <Canvas
             shadows
             dpr={[1, 2]}
@@ -184,6 +206,7 @@ function AppCanvas() {
                 canMove={canMove}
                 onMoveStart={handleMoveStart}
                 entered={entered}
+                useJoystick={useJoystick}
               />
             </Suspense>
             <Preload all />
@@ -213,6 +236,10 @@ function AppCanvas() {
           >
             Now you can move
           </div>
+        )}
+
+        {canMove && useJoystick && (
+          <MobileJoystick onEnd={() => {}} />
         )}
 
         {/* Scroll space to drive Lenis progress while canvas stays fixed */}

@@ -103,7 +103,10 @@ function useWebGLBackground(canvasRef: React.RefObject<HTMLCanvasElement | null>
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const gl = canvas.getContext("webgl", { antialias: false, alpha: false });
+    const gl = canvas.getContext("webgl", { antialias: false, alpha: false })
+      ?? (canvas.getContext as (id: string, opts?: object) => WebGLRenderingContext | null)(
+        "experimental-webgl", { antialias: false, alpha: false }
+      );
     if (!gl) return;
 
     // Compile shaders

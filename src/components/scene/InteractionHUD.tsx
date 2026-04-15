@@ -63,6 +63,15 @@ function InteractionHUD() {
         transform: "translateX(-50%)",
         zIndex: 100,
       }}
+      role="button"
+      onClick={() => {
+        const label = labelRef.current;
+        if (label === "Contact Us") {
+          window.open(ContactUsUrl, "_blank");
+        } else if (label === "Download Now") {
+          window.open(DownloadNowUrl, "_blank");
+        }
+      }}
     >
       <div
         className="interaction-prompt"

@@ -22,6 +22,7 @@ type CorridorSceneProps = {
   canMove: boolean;
   onMoveStart?: () => void;
   entered: boolean;
+  useJoystick?: boolean;
 };
 
 function CorridorScene({
@@ -29,6 +30,7 @@ function CorridorScene({
   canMove,
   onMoveStart,
   entered,
+  useJoystick,
 }: CorridorSceneProps) {
   const { scene } = useGLTF(ASSETS.Wall);
 
@@ -59,7 +61,8 @@ function CorridorScene({
     () => ({
       minX: -corridorHalfWidth * 0.9,
       maxX: corridorHalfWidth * 0.9,
-      minZ: fortPosition[2] + 25,
+      // Change `+ 10` to adjust how close you can get to the fort. Right now it stops 10 units away (previously 25).
+      minZ: fortPosition[2] + 20,
       maxZ: 0,
     }),
     [corridorHalfWidth, fortPosition],
@@ -72,6 +75,7 @@ function CorridorScene({
         enabled={canMove}
         bounds={moveBounds}
         onMoveStart={onMoveStart}
+        useJoystick={useJoystick}
       />
       <SunCycle />
       <Lights />

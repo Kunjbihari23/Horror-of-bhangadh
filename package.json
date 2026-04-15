@@ -20,6 +20,7 @@
     "gsap": "^3.14.2",
     "lenis": "^1.3.20",
     "lil-gui": "^0.21.0",
+    "nipplejs": "^1.0.1",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "react-router-dom": "^7.13.2",

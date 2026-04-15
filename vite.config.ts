@@ -12,5 +12,8 @@ export default defineConfig({
     babel({ presets: [reactCompilerPreset()] }),
     glsl(),
   ],
-  base: "/",
+  server: {
+    allowedHosts: ["kris-tribadic-unargumentatively.ngrok-free.dev"],
+  },
+  base: "/horror-of-bhangadh/",
 });

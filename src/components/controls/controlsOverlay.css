@@ -88,3 +88,69 @@
   font-size: 14px;
   line-height: 1.5;
 }
+
+/* ── Mode Toggle ── */
+.mode-toggle {
+  position: absolute;
+  top: 40px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  pointer-events: auto;
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+  padding: 6px 14px;
+  cursor: pointer;
+  user-select: none;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.mode-toggle:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+.mode-toggle-icon {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.mode-toggle-label {
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.85);
+  white-space: nowrap;
+}
+
+.mode-toggle-switch {
+  width: 32px;
+  height: 18px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 999px;
+  position: relative;
+  transition: background 0.2s;
+  flex-shrink: 0;
+}
+
+.mode-toggle-switch.active {
+  background: rgba(0, 229, 255, 0.55);
+}
+
+.mode-toggle-switch::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: white;
+  transition: transform 0.2s;
+}
+
+.mode-toggle-switch.active::after {
+  transform: translateX(14px);
+}
