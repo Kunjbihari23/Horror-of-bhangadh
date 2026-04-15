@@ -15,5 +15,5 @@ export default defineConfig({
   server: {
     allowedHosts: ["kris-tribadic-unargumentatively.ngrok-free.dev"],
   },
-  base: "/horror-of-bhangadh/",
+  base: "/",
 });
