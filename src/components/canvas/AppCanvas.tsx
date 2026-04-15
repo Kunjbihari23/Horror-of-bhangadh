@@ -70,7 +70,7 @@ function AppCanvas() {
       duration: 1.1,
       lerp: 0.08,
       smoothWheel: true,
-      smoothTouch: true,
+      // smoothTouch: true,
       touchMultiplier: 1.5,
       wheelMultiplier: 0.9,
     });
@@ -238,9 +238,7 @@ function AppCanvas() {
           </div>
         )}
 
-        {canMove && useJoystick && (
-          <MobileJoystick onEnd={() => {}} />
-        )}
+        {canMove && useJoystick && <MobileJoystick onEnd={() => {}} />}
 
         {/* Scroll space to drive Lenis progress while canvas stays fixed */}
         <div style={{ height: `${scrollHeightVh}vh` }} aria-hidden />
