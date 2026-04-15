@@ -74,11 +74,15 @@ function InteractionHUD() {
       }}
     >
       <div
-        className="interaction-prompt"
+        className="interaction-prompt flex flex-col"
         aria-hidden={nearestZone ? "false" : "true"}
       >
-        {/* <div className="prompt-key p-1!">Enter</div> */}
-        <div className="prompt-text">Click to {labelText}</div>
+        <div className="prompt-text flex items-center gap-2">
+          <span className="prompt-key p-1! w-fit">Click</span> to {labelText}
+        </div>
+        <div className="prompt-text flex items-center gap-2">
+          or Press <span className="prompt-key p-1!">Enter</span>
+        </div>
       </div>
     </div>
   );
