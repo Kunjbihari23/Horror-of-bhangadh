@@ -1,6 +1,7 @@
 import { useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
+import { isIOS } from "../../utils/platform";
 
 type StarsProps = {
   count?: number;
@@ -15,12 +16,13 @@ const Stars = ({
   minHeight = 160,
   rotationSpeedX = 0.0008,
 }: StarsProps) => {
+  const effectiveCount = isIOS() ? Math.min(count, 300) : count;
   const groupRef = useRef<THREE.Group>(null);
   const positions = useMemo(() => {
     const [minR, maxR] = radiusRange;
     const data: number[] = [];
 
-    while (data.length < count * 3) {
+    while (data.length < effectiveCount * 3) {
       const u = Math.random();
       const v = Math.random();
       const theta = 2 * Math.PI * u;
@@ -39,7 +41,7 @@ const Stars = ({
     }
 
     return new Float32Array(data);
-  }, [count, radiusRange, minHeight]);
+  }, [effectiveCount, radiusRange, minHeight]);
 
   useFrame((_, delta) => {
     if (groupRef.current) {

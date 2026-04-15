@@ -1,6 +1,7 @@
 import { useFrame, useThree } from "@react-three/fiber";
 import { useMemo, useRef } from "react";
 import * as THREE from "three";
+import { isIOS } from "../../utils/platform";
 
 type FogVolumeProps = {
   count?: number;
@@ -69,6 +70,7 @@ const FogVolume = ({
   scaleRange = [20, 48],
   opacityRange = [0.12, 0.28],
 }: FogVolumeProps) => {
+  const effectiveCount = isIOS() ? Math.min(count, 40) : count;
   const meshRefs = useRef<THREE.Mesh[]>([]);
   const { camera } = useThree();
   const texture = useMemo(() => createFogTexture(), []);
@@ -78,7 +80,7 @@ const FogVolume = ({
     const maxZ = Math.max(zRange[0], zRange[1]);
     const data: FogSlice[] = [];
 
-    for (let i = 0; i < count; i += 1) {
+    for (let i = 0; i < effectiveCount; i += 1) {
       const scale = THREE.MathUtils.lerp(scaleRange[0], scaleRange[1], Math.random());
       const aspect = THREE.MathUtils.lerp(1.6, 3.2, Math.random());
       const opacity = THREE.MathUtils.lerp(opacityRange[0], opacityRange[1], Math.random());
@@ -102,7 +104,7 @@ const FogVolume = ({
     }
 
     return data;
-  }, [count, areaWidth, zRange, heightRange, speedRange, scaleRange, opacityRange]);
+  }, [effectiveCount, areaWidth, zRange, heightRange, speedRange, scaleRange, opacityRange]);
 
   useFrame(({ clock }, delta) => {
     const wrap = areaWidth / 2 + 18;

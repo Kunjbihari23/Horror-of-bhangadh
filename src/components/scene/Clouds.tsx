@@ -1,6 +1,7 @@
 import { useFrame, useThree } from "@react-three/fiber";
 import { useMemo, useRef } from "react";
 import * as THREE from "three";
+import { isIOS } from "../../utils/platform";
 
 type CloudsProps = {
   count?: number;
@@ -148,6 +149,7 @@ const Clouds = ({
   scaleRange = [18, 46],
   opacityRange = [0.2, 0.48],
 }: CloudsProps) => {
+  const effectiveCount = isIOS() ? Math.min(count, 25) : count;
   const meshRefs = useRef<THREE.Mesh[]>([]);
   const { camera } = useThree();
   const textures = useMemo(
@@ -160,7 +162,7 @@ const Clouds = ({
     const maxZ = Math.max(zRange[0], zRange[1]);
     const data: CloudData[] = [];
 
-    for (let i = 0; i < count; i += 1) {
+    for (let i = 0; i < effectiveCount; i += 1) {
       const scale = THREE.MathUtils.lerp(
         scaleRange[0],
         scaleRange[1],
@@ -195,7 +197,7 @@ const Clouds = ({
 
     return data;
   }, [
-    count,
+    effectiveCount,
     areaWidth,
     zRange,
     heightRange,

@@ -11,6 +11,7 @@ import { InteractionProvider } from "../../context/InteractionProvider";
 import InteractionHUD from "../scene/InteractionHUD";
 import ControlsOverlay from "../controls/ControlsOverlay";
 import MobileJoystick from "../controls/MobileJoystick";
+import { isIOS } from "../../utils/platform";
 
 /**
  * This invisible component sits inside <Canvas> and forwards
@@ -70,8 +71,8 @@ function AppCanvas() {
       duration: 1.1,
       lerp: 0.08,
       smoothWheel: true,
-      // smoothTouch: true,
-      touchMultiplier: 1.5,
+      smoothTouch: true,
+      touchMultiplier: 2.0,
       wheelMultiplier: 0.9,
     });
 
@@ -176,11 +177,8 @@ function AppCanvas() {
             position: "fixed",
             inset: 0,
             width: "100vw",
-            /* iOS Safari: fill available height excluding browser chrome */
-            height: "100vh",
-            // @ts-expect-error webkit vendor prefix
-            WebkitHeight: "-webkit-fill-available",
-            touchAction: "none",
+            height: "100dvh",
+            touchAction: "pan-y",
           }}
         >
           <ControlsOverlay
@@ -190,11 +188,12 @@ function AppCanvas() {
             onToggleMode={() => setUseJoystick((v) => !v)}
           />
           <Canvas
-            shadows
-            dpr={[1, 2]}
+            shadows={!isIOS()}
+            dpr={isIOS() ? Math.min(1.5, window.devicePixelRatio) : [1, 2]}
             gl={{
               toneMapping: THREE.ACESFilmicToneMapping,
               toneMappingExposure: 1.4,
+              powerPreference: "high-performance",
             }}
             camera={{ position: [0, 2.8, 20], fov: 70 }}
           >
@@ -238,7 +237,9 @@ function AppCanvas() {
           </div>
         )}
 
-        {canMove && useJoystick && <MobileJoystick onEnd={() => {}} />}
+        {canMove && useJoystick && (
+          <MobileJoystick onEnd={() => {}} />
+        )}
 
         {/* Scroll space to drive Lenis progress while canvas stays fixed */}
         <div style={{ height: `${scrollHeightVh}vh` }} aria-hidden />

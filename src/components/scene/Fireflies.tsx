@@ -1,6 +1,7 @@
 import { useFrame } from "@react-three/fiber";
 import { useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
+import { isIOS } from "../../utils/platform";
 
 type FirefliesProps = {
   count?: number;
@@ -29,6 +30,8 @@ function Fireflies({
   speed = [0.25, 0.95],
   color = "#dce543",
 }: FirefliesProps) {
+  // Reduce count on iOS to avoid memory pressure crashes
+  const effectiveCount = isIOS() ? Math.min(count, 300) : count;
   const meshRef = useRef<THREE.InstancedMesh>(null);
   const glowMeshRef = useRef<THREE.InstancedMesh>(null);
 
@@ -76,7 +79,7 @@ function Fireflies({
 
   const data = useMemo<FireflyData[]>(
     () =>
-      Array.from({ length: count }, () => {
+      Array.from({ length: effectiveCount }, () => {
         const position = new THREE.Vector3(
           (Math.random() - 0.5) * sx,
           (Math.random() - 0.5) * sy,
@@ -103,7 +106,7 @@ function Fireflies({
           size: THREE.MathUtils.lerp(minSize, maxSize, Math.random()),
         };
       }),
-    [count, sx, sy, sz, minSize, maxSize, minSpeed, maxSpeed],
+    [effectiveCount, sx, sy, sz, minSize, maxSize, minSpeed, maxSpeed],
   );
 
   useEffect(() => {
@@ -196,7 +199,7 @@ function Fireflies({
       {glowTexture && (
         <instancedMesh
           ref={glowMeshRef}
-          args={[null as any, null as any, count]}
+          args={[null as any, null as any, effectiveCount]}
           frustumCulled={false}
           renderOrder={1}
         >
@@ -215,7 +218,7 @@ function Fireflies({
       )}
       <instancedMesh
         ref={meshRef}
-        args={[null as any, null as any, count]}
+        args={[null as any, null as any, effectiveCount]}
         frustumCulled={false}
         renderOrder={2}
       >

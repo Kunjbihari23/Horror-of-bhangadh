@@ -8,6 +8,7 @@ import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { ASSETS } from "../../../utils/assets";
 import { FORT_WINDOW_SPIRIT_MOHINI } from "./fortLayout";
+import { isIOS } from "../../../utils/platform";
 
 function FortWindowSpiritsMohini() {
   // 1. Log immediately to track loading state
@@ -16,8 +17,9 @@ function FortWindowSpiritsMohini() {
 const listenerRef = useRef<THREE.AudioListener | null>(null);
 
   const fbx = useFBX(ASSETS.mohiniComplete);
-  // 'city' provides neutral, crisp lighting suitable for a horror night scene
-  const reflectionTexture = useEnvironment({ preset: "city" });
+  // Use lighter environment on iOS to prevent memory crash
+  const envPreset = isIOS() ? "night" : "city";
+  const reflectionTexture = useEnvironment({ preset: envPreset });
 
   const group = useRef<THREE.Group | null>(null);
 
@@ -60,9 +62,8 @@ const listenerRef = useRef<THREE.AudioListener | null>(null);
   });
 
   // 3. Apply Environment and Ghostly Materials
-  // ... (Lines 62-113 remain unchanged)
   useEffect(() => {
-    if (!fbx || !reflectionTexture) return;
+    if (!fbx) return;
 
    
 
@@ -84,9 +85,12 @@ const listenerRef = useRef<THREE.AudioListener | null>(null);
 
         const standardMat = mat as THREE.MeshStandardMaterial;
 
-        // Apply environment light
-        standardMat.envMap = reflectionTexture;
-        standardMat.envMapIntensity = 1.2;
+        // Apply environment light (only if available)
+        if (reflectionTexture) {
+          standardMat.envMap = reflectionTexture;
+          // Reduce intensity on iOS to save processing
+          standardMat.envMapIntensity = isIOS() ? 0.6 : 1.2;
+        }
 
         // Ghostly properties (balanced)
         standardMat.metalness = 0.05; // Almost no metalness

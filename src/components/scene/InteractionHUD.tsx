@@ -77,8 +77,8 @@ function InteractionHUD() {
         className="interaction-prompt"
         aria-hidden={nearestZone ? "false" : "true"}
       >
-        <div className="prompt-key p-1!">Enter</div>
-        <div className="prompt-text">{labelText}</div>
+        {/* <div className="prompt-key p-1!">Enter</div> */}
+        <div className="prompt-text">Click to {labelText}</div>
       </div>
     </div>
   );
